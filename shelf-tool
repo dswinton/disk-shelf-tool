@@ -47,7 +47,7 @@ class shelfTool {
 	//List shelves and devices in a tree
 	function list(){
 		foreach($this->o as $shelfId => $disks){
-			echo "Shelf ID: \033[0;32m".$shelfId."\033[0m"."\n";
+			echo "Shelf ID: \033[0;32m".$shelfId."\033[0m"." (".count($disks)." disks)\n";
 			foreach($disks as $d){
 				echo "\033[0;31m".$d."\033[0m"."\n";
 			};
