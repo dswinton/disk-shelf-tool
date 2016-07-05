@@ -53,6 +53,18 @@ class shelfTool {
 			};
 		};
 	}
+
+        //List shelves and devices in a tree - follow symlinks to /dev/sdX
+        function listSdx(){
+                foreach($this->o as $shelfId => $disks){
+                        echo "Shelf ID: \033[0;32m".$shelfId."\033[0m"." (".count($disks)." disks)\n";
+                        foreach($disks as $d){
+				$link = explode('/',readLink($d));
+                                echo "\033[0;31m/dev/".$link[2]."\033[0m"."\n";
+                        };
+                };
+        }
+
 	
 	//Blink the LED's on all the discovered drives in a shelf
 	function blink($shelf){
@@ -73,6 +85,7 @@ class shelfTool {
 		$this->log('');
 		$this->log('help -- displays this message');
 		$this->log('list -- lists shelves (green) and their disks (red)');
+                $this->log('list-sdx -- lists shelves (green) and their disks (red) - display /dev/sdX notation rather than /dev/disk/by-path/X');
 		$this->log('blink <shelf id> -- blinks all disks in a shelf');
 		$this->log('run <shelf id> <command> -- runs a command on all disks in a shelf interactively, one at a time -- for example, use parted to format or partition disks');
 	}
@@ -98,6 +111,10 @@ switch($action){
 		$st->list();
 		break;
 		
+        case "list-sdx":
+                $st->listSdx();
+                break;
+
 	case "blink":
 		$st->blink($shelf);
 		break;
