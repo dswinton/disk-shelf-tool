@@ -26,6 +26,11 @@ This tool uses the /dev/disk/by-id/ directory for discovery, so if your distro d
 
 - list 
 -- lists shelves (green) and their disks (red)
+-- displays paths as /dev/disk/by-id/X
+
+- list-sdx
+-- lists shelves (green) and their disks (red)
+-- Displays paths as /dev/sdX
 
 - blink <shelf id> 
 -- blinks all disks in a shelf
