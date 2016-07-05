@@ -1,6 +1,10 @@
 #!/usr/bin/php
 <?php
 
+//Shelf Tool - CLI tool for managing JBOD disk shelves on Linux / Ubuntu 
+//Initial version written by David Swinton
+//Licensed under GNU GPL v3
+//See https://github.com/dswinton/disk-shelf-tool
 
 //Command line arguments
 @$action = $argv[1];
@@ -70,7 +74,6 @@ class shelfTool {
 		$this->log('help -- displays this message');
 		$this->log('list -- lists shelves (green) and their disks (red)');
 		$this->log('blink <shelf id> -- blinks all disks in a shelf');
-		$this->log('deps -- install dependencies of this tool (sas_blink_disk, etc.).  Writen for Debain/Ubuntu, uses apt.');
 		$this->log('run <shelf id> <command> -- runs a command on all disks in a shelf interactively, one at a time -- for example, use parted to format or partition disks');
 	}
 	
@@ -84,11 +87,6 @@ class shelfTool {
 		};
 	}
 	
-	//Installs dependencies
-	function deps(){
-		$this->log('Installing dependencies using APT...');
-		exec('apt-get install sdparm php5-cli');
-	}
 
 };
 
@@ -107,11 +105,7 @@ switch($action){
 	case "run":
 		$st->runCommand($shelf, $command);
 		break;
-		
-	case "deps":
-		$st->deps();
-		break;
-		
+				
 	case "help":
 		$st->usage();
 		break;
