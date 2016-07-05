@@ -14,7 +14,7 @@ This tool uses the /dev/disk/by-id/ directory for discovery, so if your distro d
 
 
 
-# USAGE: 
+# Usage: 
 ./shelf-tool <help|list|blink|deps|run> [shelf id] [command]
 
 
@@ -51,15 +51,16 @@ Run parted interactively on each disk in a shelf (one by one) to create labels a
 
 
 
-#TODO:
-This project is not actively developed by me, so over to you Open Source Community...
+#Todo:
+This project is not actively  being developed by me, so over to you Open Source Community...
 - Display vendor / SAS enclosure number information for the shelves to make them easier to identify
 - List size / vendor and/or partition information next to each disk
 
 
 
 #Credits:
-Written by David Swinton
-No external libraries used, but the heavy listing is done by Linux, PHP and the sdparm package.
+Written by David Swinton.
+
+No external libraries used, but the heavy lifting is done by Linux, PHP and the sdparm package.
 
 
