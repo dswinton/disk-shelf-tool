@@ -1,0 +1,129 @@
+#!/usr/bin/php
+<?php
+
+
+//Command line arguments
+@$action = $argv[1];
+@$shelf = $argv[2];
+@$command = $argv[3];
+
+
+class shelfTool {
+	
+	//Nested array of all shelves and devices
+	public $o = array();
+	
+	//Flat array of all devices
+	public $allDevs = array();
+
+	//Constructor -- get the list of all the things
+	function __construct(){
+		
+		
+		//Actually list the things
+		$dir = scandir('/dev/disk/by-path/');
+		
+		//Build array of shelves and devices
+		foreach($dir as $d){
+			$i = explode('-', $d);
+			if(@count($i) == 7){	//Ignore partitions / . / .. and anything that doesn't look like a shelf
+				@$this->o[$i[3]][$i[4]] = '/dev/disk/by-path/'.$d;
+				$allDevs[] = '/dev/disk/by-path/'.$d;
+			};
+
+		};
+	}
+
+	//Output a log line
+	function log($line){
+		echo $line."\n";
+	}
+
+
+	//List shelves and devices in a tree
+	function list(){
+		foreach($this->o as $shelfId => $disks){
+			echo "Shelf ID: \033[0;32m".$shelfId."\033[0m"."\n";
+			foreach($disks as $d){
+				echo "\033[0;31m".$d."\033[0m"."\n";
+			};
+		};
+	}
+	
+	//Blink the LED's on all the discovered drives in a shelf
+	function blink($shelf){
+		if($shelf){
+			$this->log("Blinking shelf ".$shelf." (".count($o[$argv[1]])." devices)...");
+			foreach($this->o[$shelf] as $d){
+				exec('screen -d -m sas_disk_blink '.$d."\n");
+			};
+		}else{
+			$this->log('Shelf is a required argument');
+		};
+	}
+	
+	//Prints usage information
+	function usage(){
+		global $argv;
+		$this->log('USAGE: '.$argv[0].' <help|list|blink|deps|run> [shelf id] [command]');
+		$this->log('');
+		$this->log('help -- displays this message');
+		$this->log('list -- lists shelves (green) and their disks (red)');
+		$this->log('blink <shelf id> -- blinks all disks in a shelf');
+		$this->log('deps -- install dependencies of this tool (sas_blink_disk, etc.).  Writen for Debain/Ubuntu, uses apt.');
+		$this->log('run <shelf id> <command> -- runs a command on all disks in a shelf interactively, one at a time -- for example, use parted to format or partition disks');
+	}
+	
+	//Runs a command on each disk in a shelf
+	function runCommand($shelf, $command){
+		if(!$shelf){$this->log('Shelf is required');exit;};
+		if(!$command){$this->log('Command is required');exit;};
+		
+		foreach($this->o[$shelf] as $d){
+			passthru($command. ' '.$d);
+		};
+	}
+	
+	//Installs dependencies
+	function deps(){
+		$this->log('Installing dependencies using APT...');
+		exec('apt-get install sdparm php5-cli');
+	}
+
+};
+
+
+$st = new shelfTool();
+
+switch($action){
+	case "list":
+		$st->list();
+		break;
+		
+	case "blink":
+		$st->blink($shelf);
+		break;
+		
+	case "run":
+		$st->runCommand($shelf, $command);
+		break;
+		
+	case "deps":
+		$st->deps();
+		break;
+		
+	case "help":
+		$st->usage();
+		break;
+		
+	case "?":
+		$st->usage();
+		break;
+		
+	default:
+		$st->usage();
+		break;
+};
+
+
+?>
