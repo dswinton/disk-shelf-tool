@@ -6,16 +6,16 @@ Written for and tested on Ubuntu 16.04, but should work on any recent and simila
 
 
 
-# USAGE: 
-./shelf-tool <help|list|blink|deps|run> [shelf id] [command]
-
-
-
 #Dependencies:
 apt-get install sdparm php5-cli
 
 For non-Debian-like distro's - you'll need your version of sas_blink_disk.
 This tool uses the /dev/disk/by-id/ directory for discovery, so if your distro doesn't support this then this tool won't work.
+
+
+
+# USAGE: 
+./shelf-tool <help|list|blink|deps|run> [shelf id] [command]
 
 
 
@@ -29,9 +29,6 @@ This tool uses the /dev/disk/by-id/ directory for discovery, so if your distro d
 
 - blink <shelf id> 
 -- blinks all disks in a shelf
-
-- deps 
--- install dependencies of this tool (sas_blink_disk, etc.).  Writen for Debain/Ubuntu, uses apt.
 
 - run <shelf id> <command> 
 -- runs a command on all disks in a shelf interactively, one at a time -- for example, use parted to format or partition disks
