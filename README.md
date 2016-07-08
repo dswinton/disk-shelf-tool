@@ -55,6 +55,10 @@ Run parted interactively on each disk in a shelf (one by one) to create labels a
 - ./shelf-tool run exp0x00000000000 parted
 
 
+Get a list of drives in a shelf and their parameters (in this case, the model number):
+- ./shelf-tool run exp0x00000000000 "hdparm -I" | grep "Model Number\|/dev/"
+
+
 
 #Todo:
 This project is not actively  being developed by me, so over to you Open Source Community...
